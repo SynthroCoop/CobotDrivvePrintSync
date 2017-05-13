@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package coop.synthro.cobot.print.user.sync;
+package coop.synthro.print;
 
 import com.microsoft.sqlserver.jdbc.SQLServerDriver;
 import com.sun.media.jfxmedia.logging.Logger;

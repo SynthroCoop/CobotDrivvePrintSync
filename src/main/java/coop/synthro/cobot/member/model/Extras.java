@@ -3,17 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package coop.synthro.cobot.print.user.sync.model;
+package coop.synthro.cobot.member.model;
 
 /**
  *
  * @author thorsten
  */
-public class Discounts
+public class Extras
 {
     private String price;
 
-    private String number_of_passes;
+    private String name;
 
     private String price_in_cents;
 
@@ -31,14 +31,14 @@ public class Discounts
         this.price = price;
     }
 
-    public String getNumber_of_passes ()
+    public String getName ()
     {
-        return number_of_passes;
+        return name;
     }
 
-    public void setNumber_of_passes (String number_of_passes)
+    public void setName (String name)
     {
-        this.number_of_passes = number_of_passes;
+        this.name = name;
     }
 
     public String getPrice_in_cents ()
@@ -74,6 +74,6 @@ public class Discounts
     @Override
     public String toString()
     {
-        return "ClassPojo [price = "+price+", number_of_passes = "+number_of_passes+", price_in_cents = "+price_in_cents+", currency = "+currency+", tax_rate = "+tax_rate+"]";
+        return "ClassPojo [price = "+price+", name = "+name+", price_in_cents = "+price_in_cents+", currency = "+currency+", tax_rate = "+tax_rate+"]";
     }
 }

@@ -3,17 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package coop.synthro.cobot.print.user.sync.model;
+package coop.synthro.cobot.member.model;
 
 /**
  *
  * @author thorsten
  */
-public class User
+public class Parent_plan
 {
     private String id;
-
-    private String email;
 
     public String getId ()
     {
@@ -25,20 +23,9 @@ public class User
         this.id = id;
     }
 
-    public String getEmail ()
-    {
-        return email;
-    }
-
-    public void setEmail (String email)
-    {
-        this.email = email;
-    }
-
     @Override
     public String toString()
     {
-        return "ClassPojo [id = "+id+", email = "+email+"]";
+        return "ClassPojo [id = "+id+"]";
     }
 }
-	

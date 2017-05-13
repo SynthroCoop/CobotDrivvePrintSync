@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package coop.synthro.cobot.print.user.sync;
+package coop.synthro.cobot.subscription.service;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
-import coop.synthro.cobot.print.user.sync.model.CobotMember;
+import coop.synthro.cobot.member.model.CobotMember;
 
 /**
  *
