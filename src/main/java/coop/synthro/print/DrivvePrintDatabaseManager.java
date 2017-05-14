@@ -6,10 +6,16 @@
 package coop.synthro.print;
 
 import com.microsoft.sqlserver.jdbc.SQLServerDriver;
-import com.sun.media.jfxmedia.logging.Logger;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -17,40 +23,72 @@ import java.sql.SQLException;
  */
 public class DrivvePrintDatabaseManager {
 
-    String dbURL = "jdbc:sqlserver://localhost\\sqlexpress";
+    String dbURL = "jdbc:sqlserver://localhost\\DRIVVE";
     String user = "sa";
     String pass = "secret";
-    Connection conn = null;
 
-    public void InitializeDatabase() {
+    private Connection GetConnection() {
 
+        Connection con = null;
         try {
             DriverManager.registerDriver(new SQLServerDriver());
-            conn = DriverManager.getConnection(dbURL, user, pass);
-            if (conn != null) {
-
-            }
+            con = DriverManager.getConnection(dbURL, user, pass);
 
         } catch (SQLException ex) {
-            ex.printStackTrace();
-            
+            java.util.logging.Logger.getLogger(DrivvePrintDatabaseManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return con;
+    }
+
+    private void AddUserToDB(Connection con, String UserId, String UserName, String UserEmail, String Pin) {
+
+        String insertStatement = "INSERT INTO dbo.Users (userLOGIN, userFULLNAME, userEMAIL,userCODE.userPIN.userPUK)VALUES (" + UserId + "," + UserName + "," + UserEmail + "," + Pin + "," + Pin + "," + Pin + ")";
+
+    }
+
+    private void LockUserInDB(String UserId) {
+
+    }
+
+    private List<PrintUser> GetAllUsersFromDB() {
+
+        List<PrintUser> users = new ArrayList<>();
+        Connection con = null;
+        try {
+            con = GetConnection();
+            Statement s1 = con.createStatement();
+            ResultSet rs = s1.executeQuery("SELECT userID,userLOGIN,userFULLNAME,userEMAIL,userCODE,userPIN,userLOCKED,userPUK FROM dbo.Users");
+            if (rs != null) {
+
+                PrintUser printUser = new PrintUser();
+                while (rs.next()) {
+                    //Retrieve by column name
+
+                    printUser.setUserID(rs.getString("userID"));
+                    printUser.setUserLOGIN(rs.getString("userLOGIN"));
+                    printUser.setUserFULLNAME(rs.getString("userFULLNAME"));
+                    printUser.setUserEMAIL(rs.getString("userEMAIL"));
+                    printUser.setUserCODE(rs.getString("userCODE"));
+                    printUser.setUserPIN(rs.getString("userPIN"));
+                    printUser.setUserLOCKED(rs.getString("userLOCKED"));
+                    printUser.setUserPUK(rs.getString("userPUK"));
+                    users.add(printUser);
+
+                }
+                return users;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DrivvePrintDatabaseManager.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
-                if (conn != null && !conn.isClosed()) {
-                    conn.close();
+                if (con != null && !con.isClosed()) {
+                    con.close();
                 }
             } catch (SQLException ex) {
-                ex.printStackTrace();
+                java.util.logging.Logger.getLogger(DrivvePrintDatabaseManager.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-    }
-
-    public void AddUser(String UserId, String UserName, String Pin) {
-
-    }
-
-    public void DeleteUser(String UserId) {
-
+        return users;
     }
 
 }
