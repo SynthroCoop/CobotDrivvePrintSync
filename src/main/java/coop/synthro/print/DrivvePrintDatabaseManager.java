@@ -35,7 +35,7 @@ public class DrivvePrintDatabaseManager {
         usertable = PropertyReader.getProperty("usertable");
     }
 
-    private Connection GetConnection() {
+    private Connection getConnection() {
 
         Connection con = null;
         try {
@@ -48,12 +48,12 @@ public class DrivvePrintDatabaseManager {
         return con;
     }
 
-    private void AddUserToDB(String UserId, String UserName, String UserEmail, String Pin) {
+    public void addUserToDB(String UserLoginName, String UserName, String UserEmail, String Pin) {
 
-        String insertStatement = "INSERT INTO " + usertable + " (userLOGIN, userFULLNAME, userEMAIL,userCODE.userPIN.userPUK)VALUES (" + UserId + "," + UserName + "," + UserEmail + "," + Pin + "," + Pin + "," + Pin + ")";
+        String insertStatement = "INSERT INTO " + usertable + " (userLOGIN, userFULLNAME, userEMAIL,userCODE.userPIN.userPUK)VALUES (" + UserLoginName + "," + UserName + "," + UserEmail + "," + Pin + "," + Pin + "," + Pin + ")";
         Connection con = null;
         try {
-            con = GetConnection();
+            con = getConnection();
             Statement s1 = con.createStatement();
             s1.executeQuery(insertStatement);
         } catch (SQLException ex) {
@@ -70,12 +70,12 @@ public class DrivvePrintDatabaseManager {
 
     }
 
-    private void LockUserInDB(String UserId) {
+    public void lockUserInDB(String UserId) {
 
         String updateStatement = "UPDATE " + usertable + " SET userLOCKED=1 WHERE userID=" + UserId + ";";
         Connection con = null;
         try {
-            con = GetConnection();
+            con = getConnection();
             Statement s1 = con.createStatement();
             s1.executeQuery(updateStatement);
         } catch (SQLException ex) {
@@ -91,12 +91,12 @@ public class DrivvePrintDatabaseManager {
         }
     }
 
-    private void UnlockUserInDB(String UserId) {
+    public void unlockUserInDB(String UserId) {
 
         String updateStatement = "UPDATE " + usertable + " SET userLOCKED=NULL WHERE userID=" + UserId + ";";
         Connection con = null;
         try {
-            con = GetConnection();
+            con = getConnection();
             Statement s1 = con.createStatement();
             s1.executeQuery(updateStatement);
         } catch (SQLException ex) {
@@ -112,12 +112,12 @@ public class DrivvePrintDatabaseManager {
         }
     }
 
-    private List<PrintUser> GetAllUsersFromDB() {
+    public List<PrintUser> getAllUsersFromDB() {
 
         List<PrintUser> users = new ArrayList<>();
         Connection con = null;
         try {
-            con = GetConnection();
+            con = getConnection();
             Statement s1 = con.createStatement();
             ResultSet rs = s1.executeQuery("SELECT userID,userLOGIN,userFULLNAME,userEMAIL,userCODE,userPIN,userLOCKED,userPUK FROM " + usertable);
             if (rs != null) {

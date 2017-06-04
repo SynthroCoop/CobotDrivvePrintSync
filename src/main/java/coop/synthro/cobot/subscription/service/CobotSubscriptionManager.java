@@ -34,10 +34,10 @@ public class CobotSubscriptionManager {
         callbackApplicationPath=PropertyReader.getProperty("callbackApplicationPath");
     }
 
-    public void InitializeSubscriptions() {
+    public void initializeSubscriptions() {
 
         //Check if we already have subscriptions
-        EventSubscriptionList subs = ListCobotSubscriptions();
+        EventSubscriptionList subs = listCobotSubscriptions();
         if (subs != null) {
 
             //Now check if we have subscriptions for new members and canceled members
@@ -47,34 +47,34 @@ public class CobotSubscriptionManager {
                     .findFirst()
                     .orElse(null);
             if (newMemberSub == null) {
-                SubscribeForNewMember();
+                subscribeForNewMember();
             }
             EventSubscription canceledMemberSub = subs.getEventSubscriptions().stream()
                     .filter((s) -> s.getEvent().equalsIgnoreCase("canceled_membership"))
                     .findFirst()
                     .orElse(null);
             if (canceledMemberSub == null) {
-                SubscribeForCanceledMember();
+                subscribeForCanceledMember();
             }
         }
     }
 
-    public void RemoveAllSubscriptions() {
+    public void removeAllSubscriptions() {
 
         //Check if we still have subscriptions
-        EventSubscriptionList subs = ListCobotSubscriptions();
+        EventSubscriptionList subs = listCobotSubscriptions();
         if (subs == null || subs.getEventSubscriptions().isEmpty()) {
             //If we have no subscriptions, we are done
             return;
         } else {
             //Unsubscribe all
             for (EventSubscription sub : subs.getEventSubscriptions()) {
-                UnsubscribeById(sub.getId());
+                unsubscribeById(sub.getId());
             }
         }
     }
 
-    private EventSubscriptionList ListCobotSubscriptions() {
+    private EventSubscriptionList listCobotSubscriptions() {
         try {
             Client client = Client.create();
 
@@ -100,7 +100,7 @@ public class CobotSubscriptionManager {
         }
     }
 
-    public void SubscribeForNewMember() {
+    private void subscribeForNewMember() {
 
         try {
             Client client = Client.create();
@@ -134,7 +134,7 @@ public class CobotSubscriptionManager {
         }
     }
 
-    public void SubscribeForCanceledMember() {
+    private void subscribeForCanceledMember() {
 
         try {
             Client client = Client.create();
@@ -168,7 +168,7 @@ public class CobotSubscriptionManager {
         }
     }
 
-    private void UnsubscribeById(String subscriptionId) {
+    private void unsubscribeById(String subscriptionId) {
         try {
             Client client = Client.create();
 

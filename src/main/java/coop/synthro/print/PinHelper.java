@@ -14,7 +14,7 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class PinHelper {
 
-    public int CreateNewPin() {
+    public static int createNewPin() {
 
         // nextInt is normally exclusive of the top value,
         // so add 1 to make it inclusive
@@ -22,12 +22,12 @@ public class PinHelper {
         return randomNum;
     }
 
-    public String CreateUniquePin(List<String> existingPins) {
+    public static String createUniquePin(List<String> existingPins) {
 
-        int pin = CreateNewPin();
+        int pin = createNewPin();
         String formattedPIN = String.format("%04d", pin);
         while (existingPins.contains(formattedPIN)) {
-            pin = CreateNewPin();
+            pin = createNewPin();
             formattedPIN = String.format("%04d", pin);
         }
 

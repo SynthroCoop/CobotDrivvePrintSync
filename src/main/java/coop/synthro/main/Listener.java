@@ -5,6 +5,7 @@
  */
 package coop.synthro.main;
 
+import coop.synthro.cobot.subscription.service.CobotSubscriptionManager;
 import javax.servlet.ServletContextEvent;
 
 /**
@@ -13,13 +14,15 @@ import javax.servlet.ServletContextEvent;
  */
 public class Listener implements javax.servlet.ServletContextListener {
 
+    CobotSubscriptionManager subscriptionManager= new CobotSubscriptionManager();
+    
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-    
+      subscriptionManager.initializeSubscriptions();
     }
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-     
+       //subscriptionManager.removeAllSubscriptions();
     }
 }

@@ -9,6 +9,7 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 import coop.synthro.cobot.member.model.CobotMember;
+import coop.synthro.utils.PropertyReader;
 
 /**
  *
@@ -16,10 +17,18 @@ import coop.synthro.cobot.member.model.CobotMember;
  */
 public class CobotUserWebClient {
 
-    public void Authenticate(){
-        
+    String cobotAccessToken = "";
+    String appKey="";
+
+    public CobotUserWebClient() {
+        cobotAccessToken = PropertyReader.getProperty("cobotAccessToken");
+        appKey= "Bearer " + cobotAccessToken;
     }
-    
+
+    public void Authenticate() {
+            //We have a valid accessToken and use this always
+    }
+
     public CobotMember GetCobotMemberInfo(String Id) {
 
         CobotMember member = null;
@@ -28,9 +37,11 @@ public class CobotUserWebClient {
             Client client = Client.create();
 
             WebResource webResource = client
-                    .resource("https://:subdomain.cobot.me/api/memberships/"+Id);
+                    .resource("https://:subdomain.cobot.me/api/memberships/" + Id);
 
-            ClientResponse response = webResource.accept("application/json")
+            ClientResponse response = webResource
+                    .accept("application/json")
+                    .header("Authorization", appKey)
                     .get(ClientResponse.class);
 
             if (response.getStatus() != 200) {
