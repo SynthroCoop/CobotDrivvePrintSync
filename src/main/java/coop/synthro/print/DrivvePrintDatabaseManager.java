@@ -6,10 +6,10 @@
 package coop.synthro.print;
 
 import com.microsoft.sqlserver.jdbc.SQLServerDriver;
+import coop.synthro.utils.PropertyReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -23,9 +23,17 @@ import java.util.logging.Logger;
  */
 public class DrivvePrintDatabaseManager {
 
-    String dbURL = "jdbc:sqlserver://localhost\\DRIVVE";
-    String user = "sa";
-    String pass = "secret";
+        String dbURL;
+        String user;
+        String pass;
+        String usertable;
+        
+    public DrivvePrintDatabaseManager() {
+        dbURL = PropertyReader.getProperty("dbURL");
+        user = PropertyReader.getProperty("user");
+        pass = PropertyReader.getProperty("pass");
+        usertable = PropertyReader.getProperty("usertable");
+    }
 
     private Connection GetConnection() {
 
@@ -40,14 +48,68 @@ public class DrivvePrintDatabaseManager {
         return con;
     }
 
-    private void AddUserToDB(Connection con, String UserId, String UserName, String UserEmail, String Pin) {
+    private void AddUserToDB(String UserId, String UserName, String UserEmail, String Pin) {
 
-        String insertStatement = "INSERT INTO dbo.Users (userLOGIN, userFULLNAME, userEMAIL,userCODE.userPIN.userPUK)VALUES (" + UserId + "," + UserName + "," + UserEmail + "," + Pin + "," + Pin + "," + Pin + ")";
+        String insertStatement = "INSERT INTO " + usertable + " (userLOGIN, userFULLNAME, userEMAIL,userCODE.userPIN.userPUK)VALUES (" + UserId + "," + UserName + "," + UserEmail + "," + Pin + "," + Pin + "," + Pin + ")";
+        Connection con = null;
+        try {
+            con = GetConnection();
+            Statement s1 = con.createStatement();
+            s1.executeQuery(insertStatement);
+        } catch (SQLException ex) {
+            Logger.getLogger(DrivvePrintDatabaseManager.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (con != null && !con.isClosed()) {
+                    con.close();
+                }
+            } catch (SQLException ex) {
+                java.util.logging.Logger.getLogger(DrivvePrintDatabaseManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
 
     }
 
     private void LockUserInDB(String UserId) {
 
+        String updateStatement = "UPDATE " + usertable + " SET userLOCKED=1 WHERE userID=" + UserId + ";";
+        Connection con = null;
+        try {
+            con = GetConnection();
+            Statement s1 = con.createStatement();
+            s1.executeQuery(updateStatement);
+        } catch (SQLException ex) {
+            Logger.getLogger(DrivvePrintDatabaseManager.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (con != null && !con.isClosed()) {
+                    con.close();
+                }
+            } catch (SQLException ex) {
+                java.util.logging.Logger.getLogger(DrivvePrintDatabaseManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    private void UnlockUserInDB(String UserId) {
+
+        String updateStatement = "UPDATE " + usertable + " SET userLOCKED=NULL WHERE userID=" + UserId + ";";
+        Connection con = null;
+        try {
+            con = GetConnection();
+            Statement s1 = con.createStatement();
+            s1.executeQuery(updateStatement);
+        } catch (SQLException ex) {
+            Logger.getLogger(DrivvePrintDatabaseManager.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (con != null && !con.isClosed()) {
+                    con.close();
+                }
+            } catch (SQLException ex) {
+                java.util.logging.Logger.getLogger(DrivvePrintDatabaseManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     private List<PrintUser> GetAllUsersFromDB() {
@@ -57,7 +119,7 @@ public class DrivvePrintDatabaseManager {
         try {
             con = GetConnection();
             Statement s1 = con.createStatement();
-            ResultSet rs = s1.executeQuery("SELECT userID,userLOGIN,userFULLNAME,userEMAIL,userCODE,userPIN,userLOCKED,userPUK FROM dbo.Users");
+            ResultSet rs = s1.executeQuery("SELECT userID,userLOGIN,userFULLNAME,userEMAIL,userCODE,userPIN,userLOCKED,userPUK FROM " + usertable);
             if (rs != null) {
 
                 PrintUser printUser = new PrintUser();
