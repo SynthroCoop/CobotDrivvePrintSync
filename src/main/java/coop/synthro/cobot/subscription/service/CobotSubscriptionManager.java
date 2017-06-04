@@ -101,7 +101,7 @@ public class CobotSubscriptionManager {
 
             return subs;
 
-        } catch (UniformInterfaceException | ClientHandlerException ex) {
+        } catch (UniformInterfaceException ex) {
             Logger.getLogger(CobotSubscriptionManager.class
                     .getName()).log(Level.SEVERE, null, ex);
             return null;
@@ -138,7 +138,7 @@ public class CobotSubscriptionManager {
                 throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
             }
 
-        } catch (JSONException | UniformInterfaceException | ClientHandlerException ex) {
+        } catch (JSONException ex) {
             Logger.getLogger(CobotSubscriptionManager.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
@@ -177,7 +177,7 @@ public class CobotSubscriptionManager {
                 throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
             }
 
-        } catch (JSONException | UniformInterfaceException | ClientHandlerException ex) {
+        } catch (JSONException ex) {
             Logger.getLogger(CobotSubscriptionManager.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
@@ -203,7 +203,7 @@ public class CobotSubscriptionManager {
                 throw new RuntimeException("Unsubscribe from webhook failed : HTTP error code : " + response.getStatus());
             }
 
-        } catch (UniformInterfaceException | ClientHandlerException ex) {
+        } catch (UniformInterfaceException ex) {
             Logger.getLogger(CobotSubscriptionManager.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
