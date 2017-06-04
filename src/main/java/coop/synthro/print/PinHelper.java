@@ -5,14 +5,24 @@
  */
 package coop.synthro.print;
 
+import coop.synthro.cobot.subscription.service.CobotSubscriptionCallbackService;
+import coop.synthro.utils.PropertyReader;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author thorsten
  */
 public class PinHelper {
+
+    private static String pinSize = "4";
+
+    public PinHelper() {
+        pinSize = PropertyReader.getProperty("pinSize");
+    }
 
     public static int createNewPin() {
 
@@ -25,11 +35,13 @@ public class PinHelper {
     public static String createUniquePin(List<String> existingPins) {
 
         int pin = createNewPin();
-        String formattedPIN = String.format("%04d", pin);
+        String formattedPIN = String.format("%0" + pinSize + "d", pin);
         while (existingPins.contains(formattedPIN)) {
             pin = createNewPin();
-            formattedPIN = String.format("%04d", pin);
+            formattedPIN = String.format("%0" + pinSize + "d", pin);
         }
+
+        Logger.getLogger(CobotSubscriptionCallbackService.class.getName()).log(Level.INFO, "Created unique pin " + formattedPIN);
 
         return formattedPIN;
     }

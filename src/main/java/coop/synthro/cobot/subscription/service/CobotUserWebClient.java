@@ -10,6 +10,8 @@ import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 import coop.synthro.cobot.member.model.CobotMember;
 import coop.synthro.utils.PropertyReader;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -25,9 +27,6 @@ public class CobotUserWebClient {
         appKey= "Bearer " + cobotAccessToken;
     }
 
-    public void Authenticate() {
-            //We have a valid accessToken and use this always
-    }
 
     public CobotMember GetCobotMemberInfo(String Id) {
 
@@ -50,11 +49,12 @@ public class CobotUserWebClient {
             }
 
             member = response.getEntity(CobotMember.class);
+            Logger.getLogger(CobotUserWebClient.class.getName()).log(Level.INFO, "Got cobot member info for user "+member.getName());
 
-        } catch (Exception e) {
 
-            e.printStackTrace();
-
+        } catch (Exception ex) {
+            Logger.getLogger(CobotUserWebClient.class.getName()).log(Level.SEVERE, "Got cobot member info for user "+member.getName(),ex);
+            throw ex;
         }
         return member;
 

@@ -24,14 +24,18 @@ import org.codehaus.jettison.json.JSONObject;
  */
 public class CobotSubscriptionManager {
 
-    String syncDomain="cobotsync.synthro.coop";
-    String cobotSubscriptionUrl="https://coworking-m1.cobot.me/api/subscriptions";
-    String callbackApplicationPath="/drivveprint/cobotCallback/";
+    String syncDomain = "cobotsync.synthro.coop";
+    String cobotSubscriptionUrl = "https://coworking-m1.cobot.me/api/subscriptions";
+    String callbackApplicationPath = "/cobot-print-user-sync/cobotCallback/";
+    String cobotAccessToken = "";
+    String appKey = "";
 
     public CobotSubscriptionManager() {
         syncDomain = PropertyReader.getProperty("syncDomain");
-        cobotSubscriptionUrl= PropertyReader.getProperty("cobotSubscriptionUrl");
-        callbackApplicationPath=PropertyReader.getProperty("callbackApplicationPath");
+        cobotSubscriptionUrl = PropertyReader.getProperty("cobotSubscriptionUrl");
+        callbackApplicationPath = PropertyReader.getProperty("callbackApplicationPath");
+        cobotAccessToken = PropertyReader.getProperty("cobotAccessToken");
+        appKey = "Bearer " + cobotAccessToken;
     }
 
     public void initializeSubscriptions() {
@@ -80,8 +84,11 @@ public class CobotSubscriptionManager {
 
             WebResource webResource = client.resource(cobotSubscriptionUrl);
 
-            ClientResponse response = webResource.type("application/json").get(ClientResponse.class
-            );
+            ClientResponse response = webResource
+                    .type("application/json")
+                    .header("Authorization", appKey)
+                    .get(ClientResponse.class
+                    );
             EventSubscriptionList subs = response.getEntity(EventSubscriptionList.class
             );
 
@@ -90,6 +97,7 @@ public class CobotSubscriptionManager {
                         .getName()).log(Level.SEVERE, null, response.getStatus());
                 throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
             }
+            Logger.getLogger(CobotSubscriptionManager.class.getName()).log(Level.INFO, "Listed all cobot subscriptions");
 
             return subs;
 
@@ -109,12 +117,14 @@ public class CobotSubscriptionManager {
 
             JSONObject obj = new JSONObject();
             obj.put("event", "confirmed_membership");
-            obj.put("callback_url", "https://" + syncDomain + callbackApplicationPath+ "created_membership");
+            obj.put("callback_url", "https://" + syncDomain + callbackApplicationPath + "created_membership");
 
-            ClientResponse response = webResourcePost.type("application/json").post(ClientResponse.class, obj);
+            ClientResponse response = webResourcePost
+                    .type("application/json")
+                    .header("Authorization", appKey)
+                    .post(ClientResponse.class, obj);
 
-            EventSubscription sub = response.getEntity(EventSubscription.class
-            );
+            EventSubscription sub = response.getEntity(EventSubscription.class);
 
             if (response.getStatus() == 422) {
                 Logger.getLogger(CobotSubscriptionManager.class
@@ -132,6 +142,8 @@ public class CobotSubscriptionManager {
             Logger.getLogger(CobotSubscriptionManager.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
+        Logger.getLogger(CobotSubscriptionManager.class.getName()).log(Level.INFO, "Event subscription for new member successful");
+
     }
 
     private void subscribeForCanceledMember() {
@@ -143,9 +155,12 @@ public class CobotSubscriptionManager {
 
             JSONObject obj = new JSONObject();
             obj.put("event", "canceled_membership");
-            obj.put("callback_url", "https://" + syncDomain + callbackApplicationPath+ "canceled_membership");
+            obj.put("callback_url", "https://" + syncDomain + callbackApplicationPath + "canceled_membership");
 
-            ClientResponse response = webResourcePost.type("application/json").post(ClientResponse.class, obj);
+            ClientResponse response = webResourcePost
+                    .type("application/json")
+                    .header("Authorization", appKey)
+                    .post(ClientResponse.class, obj);
 
             EventSubscription sub = response.getEntity(EventSubscription.class
             );
@@ -166,16 +181,21 @@ public class CobotSubscriptionManager {
             Logger.getLogger(CobotSubscriptionManager.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
+        Logger.getLogger(CobotSubscriptionManager.class.getName()).log(Level.INFO, "Event subscription for canceled member successful");
+
     }
 
     private void unsubscribeById(String subscriptionId) {
         try {
             Client client = Client.create();
 
-            WebResource webResourcePost = client.resource(cobotSubscriptionUrl+"/" + subscriptionId);
+            WebResource webResourcePost = client.resource(cobotSubscriptionUrl + "/" + subscriptionId);
 
-            ClientResponse response = webResourcePost.type("application/json").delete(ClientResponse.class
-            );
+            ClientResponse response = webResourcePost
+                    .type("application/json")
+                    .header("Authorization", appKey)
+                    .delete(ClientResponse.class
+                    );
 
             if (response.getStatus() != 204) {
                 Logger.getLogger(CobotSubscriptionManager.class
@@ -187,5 +207,8 @@ public class CobotSubscriptionManager {
             Logger.getLogger(CobotSubscriptionManager.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
+
+        Logger.getLogger(CobotSubscriptionManager.class.getName()).log(Level.INFO, "Unsubscribed for subscriptionId " + subscriptionId);
+
     }
 }

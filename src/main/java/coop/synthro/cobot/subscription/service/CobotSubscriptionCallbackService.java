@@ -10,6 +10,8 @@ import coop.synthro.print.DrivvePrintDatabaseManager;
 import coop.synthro.print.PinHelper;
 import coop.synthro.print.PrintUser;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -32,13 +34,14 @@ public class CobotSubscriptionCallbackService {
     public void created_membership(String body) {
 
         //get request body and extract membershipId
-        if(body==null){
+        if (body == null) {
+            Logger.getLogger(CobotSubscriptionCallbackService.class.getName()).log(Level.SEVERE, "Missing message body in created_membership");
             throw new IllegalArgumentException("Missing message body in created_membership");
         }
-        String memberId = body.substring(body.lastIndexOf('/') + 1,body.lastIndexOf('"') -1);
-                
+        String memberId = body.substring(body.lastIndexOf('/') + 1, body.lastIndexOf('"') - 1);
+        Logger.getLogger(CobotSubscriptionCallbackService.class.getName()).log(Level.INFO, "Create membership with id" + memberId);
+
         //Get user information from cobot for this membershipId. 
-        cobotClient.Authenticate();
         CobotMember cobotUser = cobotClient.GetCobotMemberInfo(memberId);
         //Get all existing members from database
         List<PrintUser> existingUsers = databaseManager.getAllUsersFromDB();
@@ -51,7 +54,8 @@ public class CobotSubscriptionCallbackService {
                 .collect(Collectors.toList());
 
         if (matchingUsers.size() > 1) {  //we should not have more users. We ignore this for now.
-            return;
+            Logger.getLogger(CobotSubscriptionCallbackService.class.getName()).log(Level.INFO, "A cobot member has been added multiple times to the drivve print database");
+            throw new IllegalArgumentException("A cobot member has been added multiple times to the drivve print database");
         }
 
         if (matchingUsers.size() == 1) {//we have found a match
@@ -73,6 +77,9 @@ public class CobotSubscriptionCallbackService {
         String newPin = PinHelper.createUniquePin(allPins);
 
         databaseManager.addUserToDB(cobotUser.getEmail(), cobotUser.getName(), cobotUser.getEmail(), newPin);
+
+        Logger.getLogger(CobotSubscriptionCallbackService.class.getName()).log(Level.INFO, "Successfully created membership with id" + memberId);
+
     }
 
     @POST
@@ -80,13 +87,12 @@ public class CobotSubscriptionCallbackService {
     @Consumes(MediaType.APPLICATION_JSON)
     public void canceled_membership(String body) {
         //get call body and extract membershipId
-        if(body==null){
+        if (body == null) {
             throw new IllegalArgumentException("Missing message body in created_membership");
         }
-        String memberId = body.substring(body.lastIndexOf('/') + 1,body.lastIndexOf('"') -1);
+        String memberId = body.substring(body.lastIndexOf('/') + 1, body.lastIndexOf('"') - 1);
 
         //Get user information from cobot for this membershipId. 
-        cobotClient.Authenticate();
         CobotMember cobotUser = cobotClient.GetCobotMemberInfo(memberId);
 
         //Get all existing members from database
@@ -105,6 +111,8 @@ public class CobotSubscriptionCallbackService {
             //this user must be locked. 
             PrintUser matchingUser = matchingUsers.get(0);
             databaseManager.lockUserInDB(matchingUser.getUserID());
+
+            Logger.getLogger(CobotSubscriptionCallbackService.class.getName()).log(Level.INFO, "Successfully canceled membership with id" + memberId);
 
             return;
         }

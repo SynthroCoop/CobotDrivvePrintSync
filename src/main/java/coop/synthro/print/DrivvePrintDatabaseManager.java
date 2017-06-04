@@ -23,11 +23,11 @@ import java.util.logging.Logger;
  */
 public class DrivvePrintDatabaseManager {
 
-        String dbURL;
-        String user;
-        String pass;
-        String usertable;
-        
+    String dbURL;
+    String user;
+    String pass;
+    String usertable;
+
     public DrivvePrintDatabaseManager() {
         dbURL = PropertyReader.getProperty("dbURL");
         user = PropertyReader.getProperty("user");
@@ -41,6 +41,7 @@ public class DrivvePrintDatabaseManager {
         try {
             DriverManager.registerDriver(new SQLServerDriver());
             con = DriverManager.getConnection(dbURL, user, pass);
+            Logger.getLogger(DrivvePrintDatabaseManager.class.getName()).log(Level.INFO, "Got database connection");
 
         } catch (SQLException ex) {
             java.util.logging.Logger.getLogger(DrivvePrintDatabaseManager.class.getName()).log(Level.SEVERE, null, ex);
@@ -56,6 +57,8 @@ public class DrivvePrintDatabaseManager {
             con = getConnection();
             Statement s1 = con.createStatement();
             s1.executeQuery(insertStatement);
+            Logger.getLogger(DrivvePrintDatabaseManager.class.getName()).log(Level.INFO, "Inserted user " + UserLoginName + " to database.");
+
         } catch (SQLException ex) {
             Logger.getLogger(DrivvePrintDatabaseManager.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -78,6 +81,8 @@ public class DrivvePrintDatabaseManager {
             con = getConnection();
             Statement s1 = con.createStatement();
             s1.executeQuery(updateStatement);
+            Logger.getLogger(DrivvePrintDatabaseManager.class.getName()).log(Level.INFO, "Locked user " + UserId + " in database.");
+
         } catch (SQLException ex) {
             Logger.getLogger(DrivvePrintDatabaseManager.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -99,6 +104,8 @@ public class DrivvePrintDatabaseManager {
             con = getConnection();
             Statement s1 = con.createStatement();
             s1.executeQuery(updateStatement);
+            Logger.getLogger(DrivvePrintDatabaseManager.class.getName()).log(Level.INFO, "Unlocked user " + UserId + " in database.");
+
         } catch (SQLException ex) {
             Logger.getLogger(DrivvePrintDatabaseManager.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -137,6 +144,8 @@ public class DrivvePrintDatabaseManager {
                     users.add(printUser);
 
                 }
+                Logger.getLogger(DrivvePrintDatabaseManager.class.getName()).log(Level.INFO, "Selected all users from database.");
+
                 return users;
             }
         } catch (SQLException ex) {
