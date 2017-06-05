@@ -6,6 +6,7 @@
 package coop.synthro.print;
 
 import com.microsoft.sqlserver.jdbc.SQLServerDriver;
+import coop.synthro.utils.PasswordCryptor;
 import coop.synthro.utils.PropertyReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -30,8 +31,8 @@ public class DrivvePrintDatabaseManager {
 
     public DrivvePrintDatabaseManager() {
         dbURL = PropertyReader.getProperty("dbURL");
-        user = PropertyReader.getProperty("user");
-        pass = PropertyReader.getProperty("pass");
+        user = PropertyReader.getProperty("dbUuser");
+        pass = PasswordCryptor.decrypt(PropertyReader.getProperty("dbpass"));
         usertable = PropertyReader.getProperty("usertable");
     }
 

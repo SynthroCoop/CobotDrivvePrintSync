@@ -114,7 +114,6 @@ public class CobotSubscriptionCallbackService {
 
             Logger.getLogger(CobotSubscriptionCallbackService.class.getName()).log(Level.INFO, "Successfully canceled membership with id" + memberId);
 
-            return;
         }
     }
 

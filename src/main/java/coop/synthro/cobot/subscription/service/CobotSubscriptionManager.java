@@ -12,6 +12,7 @@ import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
 import coop.synthro.cobot.subscription.model.EventSubscription;
 import coop.synthro.cobot.subscription.model.EventSubscriptionList;
+import coop.synthro.utils.PasswordCryptor;
 import coop.synthro.utils.PropertyReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,15 +28,11 @@ public class CobotSubscriptionManager {
     String syncDomain = "cobotsync.synthro.coop";
     String cobotSubscriptionUrl = "https://members.coworking-m1.de/api/subscriptions";
     String callbackApplicationPath = "/cobot-print-user-sync/cobotCallback/";
-    String cobotAccessToken = "";
-    String appKey = "";
 
     public CobotSubscriptionManager() {
         syncDomain = PropertyReader.getProperty("syncDomain");
         cobotSubscriptionUrl = PropertyReader.getProperty("cobotSubscriptionUrl");
         callbackApplicationPath = PropertyReader.getProperty("callbackApplicationPath");
-        cobotAccessToken = PropertyReader.getProperty("cobotAccessToken");
-        appKey = "Bearer " + cobotAccessToken;
     }
 
     public void initializeSubscriptions() {
@@ -80,15 +77,17 @@ public class CobotSubscriptionManager {
 
     private EventSubscriptionList listCobotSubscriptions() {
         try {
+            AccessToken token = CobotAuthenticator.authenticate();
+
             Client client = Client.create();
-            
-            Logger.getLogger(CobotSubscriptionManager.class.getName()).log(Level.INFO, "App Key= "+appKey);
+
+            Logger.getLogger(CobotSubscriptionManager.class.getName()).log(Level.INFO, "App Token= " + token.getAccess_token());
 
             WebResource webResource = client.resource(cobotSubscriptionUrl);
 
             ClientResponse response = webResource
                     .type("application/json; charset=utf-8")
-                    .header("Authorization", appKey)
+                    .header("Authorization", token.getToken_type() + " " + token.getAccess_token())
                     .get(ClientResponse.class
                     );
             EventSubscriptionList subs = response.getEntity(EventSubscriptionList.class
@@ -113,6 +112,8 @@ public class CobotSubscriptionManager {
     private void subscribeForNewMember() {
 
         try {
+            AccessToken token = CobotAuthenticator.authenticate();
+
             Client client = Client.create();
 
             WebResource webResourcePost = client.resource(cobotSubscriptionUrl);
@@ -123,7 +124,7 @@ public class CobotSubscriptionManager {
 
             ClientResponse response = webResourcePost
                     .type("application/json")
-                    .header("Authorization", appKey)
+                    .header("Authorization", token.getToken_type() + " " + token.getAccess_token())
                     .post(ClientResponse.class, obj);
 
             EventSubscription sub = response.getEntity(EventSubscription.class);
@@ -151,6 +152,8 @@ public class CobotSubscriptionManager {
     private void subscribeForCanceledMember() {
 
         try {
+            AccessToken token =  CobotAuthenticator.authenticate();
+
             Client client = Client.create();
 
             WebResource webResourcePost = client.resource(cobotSubscriptionUrl);
@@ -161,7 +164,7 @@ public class CobotSubscriptionManager {
 
             ClientResponse response = webResourcePost
                     .type("application/json")
-                    .header("Authorization", appKey)
+                    .header("Authorization", token.getToken_type() + " " + token.getAccess_token())
                     .post(ClientResponse.class, obj);
 
             EventSubscription sub = response.getEntity(EventSubscription.class
@@ -189,13 +192,14 @@ public class CobotSubscriptionManager {
 
     private void unsubscribeById(String subscriptionId) {
         try {
+            AccessToken token =  CobotAuthenticator.authenticate();
             Client client = Client.create();
 
             WebResource webResourcePost = client.resource(cobotSubscriptionUrl + "/" + subscriptionId);
 
             ClientResponse response = webResourcePost
                     .type("application/json")
-                    .header("Authorization", appKey)
+                    .header("Authorization", token.getToken_type() + " " + token.getAccess_token())
                     .delete(ClientResponse.class
                     );
 
