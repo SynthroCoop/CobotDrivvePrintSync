@@ -6,11 +6,13 @@
 package coop.synthro.cobot.subscription.model;
 
 import java.util.List;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author thorsten
  */
+@XmlRootElement
 public class EventSubscriptionList {
     
     private List<EventSubscription> eventSubscriptions;

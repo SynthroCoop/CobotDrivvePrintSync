@@ -21,9 +21,15 @@
             <version>7.0</version>
             <scope>provided</scope>
         </dependency>
+        
         <dependency> 
             <groupId>com.sun.jersey</groupId> 
             <artifactId>jersey-bundle</artifactId> 
+            <version>1.19.4</version> 
+        </dependency>
+                <dependency> 
+            <groupId>com.sun.jersey</groupId> 
+            <artifactId>jersey-json</artifactId> 
             <version>1.19.4</version> 
         </dependency>
         <!-- https://mvnrepository.com/artifact/com.microsoft.sqlserver/mssql-jdbc -->
@@ -55,9 +61,9 @@
                 <configuration>
                     <url>http://localhost:38080/manager/text</url>
                     <server>TomcatServer</server>
-                    <path>/drivveprint</path>
+                    <path>/cobot-print-user-sync</path>
                     <username>admin</username>
-                    <password>mypassword</password>
+                    <password>KtFzVWzgyB</password>
                     <update>true</update>
                 </configuration>
             </plugin>

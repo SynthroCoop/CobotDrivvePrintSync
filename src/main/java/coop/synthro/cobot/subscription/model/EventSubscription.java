@@ -11,7 +11,9 @@ package coop.synthro.cobot.subscription.model;
 
 import java.util.HashMap;
 import java.util.Map;
+import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement
 public class EventSubscription {
 
     private String id;

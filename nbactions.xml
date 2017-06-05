@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+        <action>
+            <actionName>CUSTOM-tomcat7:deploy</actionName>
+            <displayName>tomcat7:deploy</displayName>
+            <goals>
+                <goal>tomcat7:deploy</goal>
+            </goals>
+        </action>
+    </actions>

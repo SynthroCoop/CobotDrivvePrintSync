@@ -25,7 +25,7 @@ import org.codehaus.jettison.json.JSONObject;
 public class CobotSubscriptionManager {
 
     String syncDomain = "cobotsync.synthro.coop";
-    String cobotSubscriptionUrl = "https://coworking-m1.cobot.me/api/subscriptions";
+    String cobotSubscriptionUrl = "https://members.coworking-m1.de/api/subscriptions";
     String callbackApplicationPath = "/cobot-print-user-sync/cobotCallback/";
     String cobotAccessToken = "";
     String appKey = "";
@@ -81,11 +81,13 @@ public class CobotSubscriptionManager {
     private EventSubscriptionList listCobotSubscriptions() {
         try {
             Client client = Client.create();
+            
+            Logger.getLogger(CobotSubscriptionManager.class.getName()).log(Level.INFO, "App Key= "+appKey);
 
             WebResource webResource = client.resource(cobotSubscriptionUrl);
 
             ClientResponse response = webResource
-                    .type("application/json")
+                    .type("application/json; charset=utf-8")
                     .header("Authorization", appKey)
                     .get(ClientResponse.class
                     );

@@ -5,10 +5,13 @@
  */
 package coop.synthro.cobot.member.model;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  *
  * @author thorsten
  */
+@XmlRootElement
 public class CobotMember
 {
     private String phone;
