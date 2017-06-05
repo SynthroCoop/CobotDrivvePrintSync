@@ -35,7 +35,7 @@ public class CobotAuthenticator {
                 cobotPassword = PasswordCryptor.decrypt(PropertyReader.getProperty("cobotPassword"));
                 cobotClientId = PasswordCryptor.decrypt(PropertyReader.getProperty("cobotClientId"));
                 cobotSecret = PasswordCryptor.decrypt(PropertyReader.getProperty("cobotSecret"));
-                cobotAccessTokenUrl = PasswordCryptor.decrypt(PropertyReader.getProperty("cobotAccessTokenUrl"));
+                cobotAccessTokenUrl = PropertyReader.getProperty("cobotAccessTokenUrl");
 
                 Client client = Client.create();
   
