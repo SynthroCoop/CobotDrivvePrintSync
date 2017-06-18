@@ -33,6 +33,8 @@ public class Time_passes
     private String currency;
 
     private String tax_rate;
+    
+    private String accounting_code;
 
     public String getIncluded_per_timespan ()
     {
@@ -138,5 +140,19 @@ public class Time_passes
     public String toString()
     {
         return "ClassPojo [included_per_timespan = "+included_per_timespan+", id = "+id+", price = "+price+", timespans = "+timespans+", discounts = "+discounts+", name = "+name+", included_timespan = "+included_timespan+", price_in_cents = "+price_in_cents+", currency = "+currency+", tax_rate = "+tax_rate+"]";
+    }
+
+    /**
+     * @return the accounting_code
+     */
+    public String getAccounting_code() {
+        return accounting_code;
+    }
+
+    /**
+     * @param accounting_code the accounting_code to set
+     */
+    public void setAccounting_code(String accounting_code) {
+        this.accounting_code = accounting_code;
     }
 }

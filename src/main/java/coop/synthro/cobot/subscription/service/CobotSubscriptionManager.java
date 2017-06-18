@@ -6,16 +6,19 @@
 package coop.synthro.cobot.subscription.service;
 
 import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.GenericType;
 import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
+import com.sun.jersey.api.client.config.ClientConfig;
+import com.sun.jersey.api.client.config.DefaultClientConfig;
+import com.sun.jersey.api.json.JSONConfiguration;
 import coop.synthro.cobot.subscription.model.EventSubscription;
-import coop.synthro.cobot.subscription.model.EventSubscriptionList;
-import coop.synthro.utils.PasswordCryptor;
 import coop.synthro.utils.PropertyReader;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ws.rs.core.MediaType;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
@@ -38,60 +41,67 @@ public class CobotSubscriptionManager {
     public void initializeSubscriptions() {
 
         //Check if we already have subscriptions
-        EventSubscriptionList subs = listCobotSubscriptions();
+        List<EventSubscription> subs = listCobotSubscriptions();
         if (subs != null) {
-
             //Now check if we have subscriptions for new members and canceled members
             //If not we subscribe.
-            EventSubscription newMemberSub = subs.getEventSubscriptions().stream()
+            EventSubscription newMemberSub = subs.stream()
                     .filter((s) -> s.getEvent().equalsIgnoreCase("confirmed_membership"))
                     .findFirst()
                     .orElse(null);
             if (newMemberSub == null) {
                 subscribeForNewMember();
             }
-            EventSubscription canceledMemberSub = subs.getEventSubscriptions().stream()
+            EventSubscription canceledMemberSub = subs.stream()
                     .filter((s) -> s.getEvent().equalsIgnoreCase("canceled_membership"))
                     .findFirst()
                     .orElse(null);
             if (canceledMemberSub == null) {
                 subscribeForCanceledMember();
             }
+        } else {
+            Logger.getLogger(CobotSubscriptionManager.class.getName()).log(Level.INFO, "No subscriptions in Cobot found!");
+            //If we have nothing
+            subscribeForNewMember();
+            subscribeForCanceledMember();
         }
     }
 
     public void removeAllSubscriptions() {
 
         //Check if we still have subscriptions
-        EventSubscriptionList subs = listCobotSubscriptions();
-        if (subs == null || subs.getEventSubscriptions().isEmpty()) {
+        List<EventSubscription> subs = listCobotSubscriptions();
+        if (subs == null || subs.isEmpty()) {
             //If we have no subscriptions, we are done
             return;
         } else {
             //Unsubscribe all
-            for (EventSubscription sub : subs.getEventSubscriptions()) {
+            for (EventSubscription sub : subs) {
+                if(sub.getEvent().equals("canceled_membership")||sub.getEvent().equals("confirmed_membership") )
                 unsubscribeById(sub.getId());
             }
         }
     }
 
-    private EventSubscriptionList listCobotSubscriptions() {
+    public List<EventSubscription> listCobotSubscriptions() {
         try {
             AccessToken token = CobotAuthenticator.authenticate();
 
-            Client client = Client.create();
+            ClientConfig clientConfig = new DefaultClientConfig();
+            clientConfig.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, Boolean.TRUE);
+            Client client = Client.create(clientConfig);
 
             Logger.getLogger(CobotSubscriptionManager.class.getName()).log(Level.INFO, "App Token= " + token.getAccess_token());
 
             WebResource webResource = client.resource(cobotSubscriptionUrl);
 
             ClientResponse response = webResource
-                    .type("application/json; charset=utf-8")
+                    .type(MediaType.APPLICATION_JSON)
                     .header("Authorization", token.getToken_type() + " " + token.getAccess_token())
-                    .get(ClientResponse.class
-                    );
-            EventSubscriptionList subs = response.getEntity(EventSubscriptionList.class
-            );
+                    .get(ClientResponse.class);
+            //String subString=response.getEntity(String.class);
+            List<EventSubscription> subs = response.getEntity(new GenericType<List<EventSubscription>>() {
+            });
 
             if (response.getStatus() != 200) {
                 Logger.getLogger(CobotSubscriptionManager.class
@@ -106,7 +116,11 @@ public class CobotSubscriptionManager {
             Logger.getLogger(CobotSubscriptionManager.class
                     .getName()).log(Level.SEVERE, null, ex);
             return null;
+        } catch (Exception ex) {
+            Logger.getLogger(CobotSubscriptionManager.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
+        return null;
     }
 
     private void subscribeForNewMember() {
@@ -152,7 +166,7 @@ public class CobotSubscriptionManager {
     private void subscribeForCanceledMember() {
 
         try {
-            AccessToken token =  CobotAuthenticator.authenticate();
+            AccessToken token = CobotAuthenticator.authenticate();
 
             Client client = Client.create();
 
@@ -192,7 +206,7 @@ public class CobotSubscriptionManager {
 
     private void unsubscribeById(String subscriptionId) {
         try {
-            AccessToken token =  CobotAuthenticator.authenticate();
+            AccessToken token = CobotAuthenticator.authenticate();
             Client client = Client.create();
 
             WebResource webResourcePost = client.resource(cobotSubscriptionUrl + "/" + subscriptionId);

@@ -20,8 +20,7 @@ public class EventSubscription {
     private String event;
     private String url;
     private Boolean active;
-    private String callbackUrl;
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private String callback_url;
 
     public String getId() {
         return id;
@@ -55,20 +54,14 @@ public class EventSubscription {
         this.active = active;
     }
 
-    public String getCallbackUrl() {
-        return callbackUrl;
+    public String getCallback_url() {
+        return callback_url;
     }
 
-    public void setCallbackUrl(String callbackUrl) {
-        this.callbackUrl = callbackUrl;
+    public void setCallback_url(String callbackUrl) {
+        this.callback_url = callbackUrl;
     }
 
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
 
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
 
 }

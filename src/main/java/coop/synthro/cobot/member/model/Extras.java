@@ -23,6 +23,11 @@ public class Extras
     private String currency;
 
     private String tax_rate;
+    
+    private String accounting_code;
+    
+    private String id;
+    
 
     public String getPrice ()
     {
@@ -78,5 +83,33 @@ public class Extras
     public String toString()
     {
         return "ClassPojo [price = "+price+", name = "+name+", price_in_cents = "+price_in_cents+", currency = "+currency+", tax_rate = "+tax_rate+"]";
+    }
+
+    /**
+     * @return the accounting_code
+     */
+    public String getAccounting_code() {
+        return accounting_code;
+    }
+
+    /**
+     * @param accounting_code the accounting_code to set
+     */
+    public void setAccounting_code(String accounting_code) {
+        this.accounting_code = accounting_code;
+    }
+
+    /**
+     * @return the id
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(String id) {
+        this.id = id;
     }
 }

@@ -17,6 +17,8 @@ public class User
     private String id;
 
     private String email;
+    
+    private String picture;
 
     public String getId ()
     {
@@ -42,6 +44,20 @@ public class User
     public String toString()
     {
         return "ClassPojo [id = "+id+", email = "+email+"]";
+    }
+
+    /**
+     * @return the picture
+     */
+    public String getPicture() {
+        return picture;
+    }
+
+    /**
+     * @param picture the picture to set
+     */
+    public void setPicture(String picture) {
+        this.picture = picture;
     }
 }
 	

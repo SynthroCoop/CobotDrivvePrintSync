@@ -23,6 +23,7 @@ public class Discounts
     private String currency;
 
     private String tax_rate;
+    
 
     public String getPrice ()
     {

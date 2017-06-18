@@ -38,11 +38,11 @@ public class CobotSubscriptionCallbackService {
             Logger.getLogger(CobotSubscriptionCallbackService.class.getName()).log(Level.SEVERE, "Missing message body in created_membership");
             throw new IllegalArgumentException("Missing message body in created_membership");
         }
-        String memberId = body.substring(body.lastIndexOf('/') + 1, body.lastIndexOf('"') - 1);
-        Logger.getLogger(CobotSubscriptionCallbackService.class.getName()).log(Level.INFO, "Create membership with id" + memberId);
+        String memberId = body.substring(body.lastIndexOf('/') + 1, body.lastIndexOf('"'));
+        Logger.getLogger(CobotSubscriptionCallbackService.class.getName()).log(Level.INFO, "Create membership with id " + memberId);
 
         //Get user information from cobot for this membershipId. 
-        CobotMember cobotUser = cobotClient.GetCobotMemberInfo(memberId);
+        CobotMember cobotUser = cobotClient.getCobotMemberInfo(memberId);
         //Get all existing members from database
         List<PrintUser> existingUsers = databaseManager.getAllUsersFromDB();
 
@@ -88,12 +88,13 @@ public class CobotSubscriptionCallbackService {
     public void canceled_membership(String body) {
         //get call body and extract membershipId
         if (body == null) {
-            throw new IllegalArgumentException("Missing message body in created_membership");
+            Logger.getLogger(CobotSubscriptionCallbackService.class.getName()).log(Level.SEVERE, "Missing message body in canceled_membership");
+            throw new IllegalArgumentException("Missing message body in canceled_membership");
         }
-        String memberId = body.substring(body.lastIndexOf('/') + 1, body.lastIndexOf('"') - 1);
+        String memberId = body.substring(body.lastIndexOf('/') + 1, body.lastIndexOf('"'));
 
         //Get user information from cobot for this membershipId. 
-        CobotMember cobotUser = cobotClient.GetCobotMemberInfo(memberId);
+        CobotMember cobotUser = cobotClient.getCobotMemberInfo(memberId);
 
         //Get all existing members from database
         List<PrintUser> existingUsers = databaseManager.getAllUsersFromDB();

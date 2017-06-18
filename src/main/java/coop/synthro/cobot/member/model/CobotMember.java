@@ -49,6 +49,17 @@ public class CobotMember
     private Payment_method payment_method;
 
     private User user;
+    
+    private String first_invoice_at;
+    
+    private String joined_at;
+    
+    private String requested_starts_at;
+    
+    private String tax_id;
+    
+    
+    
 
     public String getPhone ()
     {
@@ -234,5 +245,63 @@ public class CobotMember
     public String toString()
     {
         return "ClassPojo [phone = "+phone+", canceled_to = "+canceled_to+", upcoming_plan = "+upcoming_plan+", starts_at = "+starts_at+", confirmed_at = "+confirmed_at+", internal_memo = "+internal_memo+", next_invoice_at = "+next_invoice_at+", id = "+id+", picture = "+picture+", billing_emails = "+billing_emails+", customer_number = "+customer_number+", plan = "+plan+", email = "+email+", address = "+address+", name = "+name+", charge_taxes = "+charge_taxes+", payment_method = "+payment_method+", user = "+user+"]";
+    }
+
+    /**
+     * @return the first_invoice_at
+     */
+    public String getFirst_invoice_at() {
+        return first_invoice_at;
+    }
+
+    /**
+     * @param first_invoice_at the first_invoice_at to set
+     */
+    public void setFirst_invoice_at(String first_invoice_at) {
+        this.first_invoice_at = first_invoice_at;
+    }
+
+    /**
+  
+    /**
+     * @return the requested_starts_at
+     */
+    public String getRequested_starts_at() {
+        return requested_starts_at;
+    }
+
+    /**
+     * @param requested_starts_at the requested_starts_at to set
+     */
+    public void setRequested_starts_at(String requested_starts_at) {
+        this.requested_starts_at = requested_starts_at;
+    }
+
+    /**
+     * @return the tax_id
+     */
+    public String getTax_id() {
+        return tax_id;
+    }
+
+    /**
+     * @param tax_id the tax_id to set
+     */
+    public void setTax_id(String tax_id) {
+        this.tax_id = tax_id;
+    }
+
+    /**
+     * @return the joined_at
+     */
+    public String getJoined_at() {
+        return joined_at;
+    }
+
+    /**
+     * @param joined_at the joined_at to set
+     */
+    public void setJoined_at(String joined_at) {
+        this.joined_at = joined_at;
     }
 }

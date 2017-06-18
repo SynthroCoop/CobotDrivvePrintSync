@@ -19,6 +19,10 @@ public class Booking_credits
     private String hours;
 
     private String price_per_hour;
+    
+    private String included_unit;
+    
+    private String included_value;
 
     public Resources[] getResources ()
     {
@@ -54,6 +58,34 @@ public class Booking_credits
     public String toString()
     {
         return "ClassPojo [resources = "+resources+", hours = "+hours+", price_per_hour = "+price_per_hour+"]";
+    }
+
+    /**
+     * @return the included_unit
+     */
+    public String getIncluded_unit() {
+        return included_unit;
+    }
+
+    /**
+     * @param included_unit the included_unit to set
+     */
+    public void setIncluded_unit(String included_unit) {
+        this.included_unit = included_unit;
+    }
+
+    /**
+     * @return the included_value
+     */
+    public String getIncluded_value() {
+        return included_value;
+    }
+
+    /**
+     * @param included_value the included_value to set
+     */
+    public void setIncluded_value(String included_value) {
+        this.included_value = included_value;
     }
 }
 	

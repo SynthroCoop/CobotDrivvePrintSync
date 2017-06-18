@@ -21,7 +21,7 @@ import javax.naming.NamingException;
  */
 public class PropertyReader {
 
-    static String folderName = null;
+    static String folderName = "C:\\Program Files\\Apache Software Foundation\\Tomcat 8.5\\conf\\";
     static Properties properties = new Properties();
 
     public static String getProperty(String key) {
