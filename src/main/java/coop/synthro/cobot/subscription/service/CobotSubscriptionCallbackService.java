@@ -75,8 +75,7 @@ public class CobotSubscriptionCallbackService {
                 .collect(Collectors.toList());
 
         String newPin = PinHelper.createUniquePin(allPins);
-        
-    
+
         databaseManager.addUserToDB(cobotUser.getEmail(), cobotUser.getName(), cobotUser.getEmail(), newPin);
 
         Logger.getLogger(CobotSubscriptionCallbackService.class.getName()).log(Level.INFO, "Successfully created membership with id" + memberId);
@@ -93,6 +92,7 @@ public class CobotSubscriptionCallbackService {
             throw new IllegalArgumentException("Missing message body in canceled_membership");
         }
         String memberId = body.substring(body.lastIndexOf('/') + 1, body.lastIndexOf('"'));
+        Logger.getLogger(CobotSubscriptionCallbackService.class.getName()).log(Level.INFO, "Cancel membership with id " + memberId);
 
         //Get user information from cobot for this membershipId. 
         CobotMember cobotUser = cobotClient.getCobotMemberInfo(memberId);
@@ -105,12 +105,21 @@ public class CobotSubscriptionCallbackService {
                 .filter(user -> user.getUserEMAIL().equals(cobotUser.getEmail())) //get user with matching email
                 .collect(Collectors.toList());
 
+        if (matchingUsers.isEmpty()) {//we have found no match
+            Logger.getLogger(CobotSubscriptionCallbackService.class.getName()).log(Level.INFO, "NOT found matching user");
+        }
         if (matchingUsers.size() > 1) {  //we should not have more users. We ignore this for now.
+            for (PrintUser user : matchingUsers) {
+                Logger.getLogger(CobotSubscriptionCallbackService.class.getName()).log(Level.INFO, "Found user :"+ user.getUserFULLNAME());
+            }
             return;
         }
 
         if (matchingUsers.size() == 1) {//we have found a match
-            //this user must be locked. 
+
+            Logger.getLogger(CobotSubscriptionCallbackService.class.getName()).log(Level.INFO, "Found matching user with email " + matchingUsers.get(0).getUserEMAIL());
+
+//this user must be locked. 
             PrintUser matchingUser = matchingUsers.get(0);
             databaseManager.lockUserInDB(matchingUser.getUserID());
 

@@ -58,7 +58,7 @@ public class DrivvePrintDatabaseManager {
 
     public void addUserToDB(String UserLoginName, String UserName, String UserEmail, String Pin) {
 
-        String insertStatement = "INSERT INTO " + usertable + " (userID, userLOGIN, userFULLNAME, userEMAIL, userCODE, userPIN, userPUK, userCREATED) VALUES ( (SELECT MAX(userID) FROM " + usertable + ") + 1, ?, ?, ?, ?, ?, ?, ?);";
+        String insertStatement = "INSERT INTO " + usertable + " (userLOGIN, userFULLNAME, userEMAIL, userCODE, userPIN, userPUK, userCREATED) VALUES (?, ?, ?, ?, ?, ?, ?);";
         Logger.getLogger(DrivvePrintDatabaseManager.class.getName()).log(Level.INFO, "Inserting user with statement" + insertStatement);
         Connection con = null;
         try {
@@ -98,7 +98,7 @@ public class DrivvePrintDatabaseManager {
         try {
             con = getConnection();
             Statement s1 = con.createStatement();
-            s1.executeQuery(updateStatement);
+            s1.executeUpdate(updateStatement);
             Logger.getLogger(DrivvePrintDatabaseManager.class.getName()).log(Level.INFO, "Locked user " + UserId + " in database.");
 
         } catch (SQLException ex) {
@@ -147,10 +147,9 @@ public class DrivvePrintDatabaseManager {
             ResultSet rs = s1.executeQuery("SELECT userID,userLOGIN,userFULLNAME,userEMAIL,userCODE,userPIN,userLOCKED,userPUK FROM " + usertable);
             if (rs != null) {
 
-                PrintUser printUser = new PrintUser();
                 while (rs.next()) {
                     //Retrieve by column name
-
+                    PrintUser printUser = new PrintUser();
                     printUser.setUserID(rs.getString("userID"));
                     printUser.setUserLOGIN(rs.getString("userLOGIN"));
                     printUser.setUserFULLNAME(rs.getString("userFULLNAME"));
@@ -160,7 +159,6 @@ public class DrivvePrintDatabaseManager {
                     printUser.setUserLOCKED(rs.getString("userLOCKED"));
                     printUser.setUserPUK(rs.getString("userPUK"));
                     users.add(printUser);
-
                 }
                 Logger.getLogger(DrivvePrintDatabaseManager.class.getName()).log(Level.INFO, "Selected all users from database.");
 

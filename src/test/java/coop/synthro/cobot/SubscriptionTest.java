@@ -9,6 +9,8 @@ import coop.synthro.cobot.member.model.CobotMember;
 import coop.synthro.cobot.subscription.model.EventSubscription;
 import coop.synthro.cobot.subscription.service.CobotSubscriptionManager;
 import coop.synthro.cobot.subscription.service.CobotUserWebClient;
+import coop.synthro.print.DrivvePrintDatabaseManager;
+import coop.synthro.print.PrintUser;
 import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -75,4 +77,13 @@ public class SubscriptionTest {
 //        CobotSubscriptionManager subscriptionManager = new CobotSubscriptionManager();
 //        subscriptionManager.removeAllSubscriptions();
 //    }
+    
+    
+    @Test
+    public void getAllDbUsers() {
+
+        DrivvePrintDatabaseManager dbManager = new DrivvePrintDatabaseManager();
+        List<PrintUser> users = dbManager.getAllUsersFromDB();
+        Assert.assertNotNull(users);
+    }
 }
