@@ -75,7 +75,8 @@ public class CobotSubscriptionCallbackService {
                 .collect(Collectors.toList());
 
         String newPin = PinHelper.createUniquePin(allPins);
-
+        
+    
         databaseManager.addUserToDB(cobotUser.getEmail(), cobotUser.getName(), cobotUser.getEmail(), newPin);
 
         Logger.getLogger(CobotSubscriptionCallbackService.class.getName()).log(Level.INFO, "Successfully created membership with id" + memberId);

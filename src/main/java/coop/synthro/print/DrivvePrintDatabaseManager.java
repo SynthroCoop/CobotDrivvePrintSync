@@ -10,6 +10,7 @@ import coop.synthro.utils.PasswordCryptor;
 import coop.synthro.utils.PropertyReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -28,12 +29,14 @@ public class DrivvePrintDatabaseManager {
     String user;
     String pass;
     String usertable;
+    String schema;
 
     public DrivvePrintDatabaseManager() {
         dbURL = PropertyReader.getProperty("dbURL");
-        user = PropertyReader.getProperty("dbUuser");
-        pass = PasswordCryptor.decrypt(PropertyReader.getProperty("dbpass"));
+        user = PropertyReader.getProperty("dbUser");
+        pass = PasswordCryptor.decrypt(PropertyReader.getProperty("dbPass"));
         usertable = PropertyReader.getProperty("usertable");
+        schema = PropertyReader.getProperty("dbSchema");
     }
 
     private Connection getConnection() {
@@ -41,7 +44,10 @@ public class DrivvePrintDatabaseManager {
         Connection con = null;
         try {
             DriverManager.registerDriver(new SQLServerDriver());
-            con = DriverManager.getConnection(dbURL, user, pass);
+            String connectionUrl = dbURL + ";databaseName=" + schema + ";user=" + user + ";password=" + pass;
+            //Logger.getLogger(DrivvePrintDatabaseManager.class.getName()).log(Level.INFO, "Connection-Url :" + connectionUrl);
+            con = DriverManager.getConnection(connectionUrl);
+            //con.setSchema(schema);
             Logger.getLogger(DrivvePrintDatabaseManager.class.getName()).log(Level.INFO, "Got database connection");
 
         } catch (SQLException ex) {
@@ -52,12 +58,23 @@ public class DrivvePrintDatabaseManager {
 
     public void addUserToDB(String UserLoginName, String UserName, String UserEmail, String Pin) {
 
-        String insertStatement = "INSERT INTO " + usertable + " (userLOGIN, userFULLNAME, userEMAIL,userCODE.userPIN.userPUK)VALUES (" + UserLoginName + "," + UserName + "," + UserEmail + "," + Pin + "," + Pin + "," + Pin + ")";
+        String insertStatement = "INSERT INTO " + usertable + " (userID, userLOGIN, userFULLNAME, userEMAIL, userCODE, userPIN, userPUK, userCREATED) VALUES ( (SELECT MAX(userID) FROM " + usertable + ") + 1, ?, ?, ?, ?, ?, ?, ?);";
+        Logger.getLogger(DrivvePrintDatabaseManager.class.getName()).log(Level.INFO, "Inserting user with statement" + insertStatement);
         Connection con = null;
         try {
             con = getConnection();
-            Statement s1 = con.createStatement();
-            s1.executeQuery(insertStatement);
+            PreparedStatement stmt = con.prepareStatement(insertStatement);
+
+            stmt.setString(1, UserLoginName);
+            stmt.setString(2, UserName);
+            stmt.setString(3, UserEmail);
+            stmt.setString(4, Pin);
+            stmt.setString(5, Pin);
+            stmt.setString(6, Pin);
+            stmt.setDate(7, java.sql.Date.valueOf(java.time.LocalDate.now()));
+
+            stmt.executeUpdate();
+
             Logger.getLogger(DrivvePrintDatabaseManager.class.getName()).log(Level.INFO, "Inserted user " + UserLoginName + " to database.");
 
         } catch (SQLException ex) {
