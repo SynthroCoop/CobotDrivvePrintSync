@@ -35,6 +35,8 @@ public class Time_passes
     private String tax_rate;
     
     private String accounting_code;
+    
+    private String parsed_timespans;
 
     public String getIncluded_per_timespan ()
     {
@@ -154,5 +156,19 @@ public class Time_passes
      */
     public void setAccounting_code(String accounting_code) {
         this.accounting_code = accounting_code;
+    }
+
+    /**
+     * @return the parsed_timespans
+     */
+    public String getParsed_timespans() {
+        return parsed_timespans;
+    }
+
+    /**
+     * @param parsed_timespans the parsed_timespans to set
+     */
+    public void setParsed_timespans(String parsed_timespans) {
+        this.parsed_timespans = parsed_timespans;
     }
 }
