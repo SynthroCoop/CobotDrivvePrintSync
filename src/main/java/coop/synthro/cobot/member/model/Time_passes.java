@@ -36,7 +36,7 @@ public class Time_passes
     
     private String accounting_code;
     
-    private String parsed_timespans;
+    private Parsed_Timespans[] parsed_timespans;
 
     public String getIncluded_per_timespan ()
     {
@@ -161,14 +161,16 @@ public class Time_passes
     /**
      * @return the parsed_timespans
      */
-    public String getParsed_timespans() {
+    public Parsed_Timespans[] getParsed_timespans() {
         return parsed_timespans;
     }
 
     /**
      * @param parsed_timespans the parsed_timespans to set
      */
-    public void setParsed_timespans(String parsed_timespans) {
+    public void setParsed_timespans(Parsed_Timespans[] parsed_timespans) {
         this.parsed_timespans = parsed_timespans;
     }
+
+
 }
