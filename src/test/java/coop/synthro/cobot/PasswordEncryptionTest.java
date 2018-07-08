@@ -43,17 +43,9 @@ public class PasswordEncryptionTest {
     //
     @Test
     public void Encrypt() {
-        String user = "thorsten.richter@synthro.coop";
-        String usercrypted = PasswordCryptor.encrypt(user);
-        Assert.assertEquals("z3/Rli6weNx5afnnrkQKlFdOgiwHxl6dqnsaZJbTy+Y=", usercrypted);
-
-
     }
 
     @Test
     public void Decrypt() {
-        String userCrypted = "z3/Rli6weNx5afnnrkQKlFdOgiwHxl6dqnsaZJbTy+Y=";
-        String userDecrypted = PasswordCryptor.decrypt(userCrypted);
-        Assert.assertEquals("thorsten.richter@synthro.coop", userDecrypted);
     }
 }

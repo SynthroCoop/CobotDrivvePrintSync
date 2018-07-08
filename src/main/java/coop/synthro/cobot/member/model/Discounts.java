@@ -6,12 +6,14 @@
 package coop.synthro.cobot.member.model;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 /**
  *
  * @author thorsten
  */
 @XmlRootElement
+@JsonIgnoreProperties(ignoreUnknown=true)
 public class Discounts
 {
     private String price;
