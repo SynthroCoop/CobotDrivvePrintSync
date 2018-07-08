@@ -6,12 +6,14 @@
 package coop.synthro.cobot.member.model;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 /**
  *
  * @author Administrator
  */
 @XmlRootElement
+@JsonIgnoreProperties(ignoreUnknown=true)
 public class Booking_passes {
     
 }

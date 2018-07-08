@@ -6,12 +6,14 @@
 package coop.synthro.cobot.member.model;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 /**
  *
  * @author thorsten
  */
 @XmlRootElement
+@JsonIgnoreProperties(ignoreUnknown=true)
 public class CobotMember
 {
     private String phone;
@@ -58,7 +60,7 @@ public class CobotMember
     
     private String tax_id;
     
-    
+    private String newsletter_approval;
     
 
     public String getPhone ()
@@ -303,5 +305,19 @@ public class CobotMember
      */
     public void setJoined_at(String joined_at) {
         this.joined_at = joined_at;
+    }
+
+    /**
+     * @return the newsletter_approval
+     */
+    public String getNewsletter_approval() {
+        return newsletter_approval;
+    }
+
+    /**
+     * @param newsletter_approval the newsletter_approval to set
+     */
+    public void setNewsletter_approval(String newsletter_approval) {
+        this.newsletter_approval = newsletter_approval;
     }
 }
