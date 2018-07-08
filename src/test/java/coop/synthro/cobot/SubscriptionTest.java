@@ -71,12 +71,12 @@ public class SubscriptionTest {
 //        Assert.assertNotNull(members);
 //    }
 
-//    @Test
-//    public void removeAllSubscriptions() {
-//
-//        CobotSubscriptionManager subscriptionManager = new CobotSubscriptionManager();
-//        subscriptionManager.removeAllSubscriptions();
-//    }
+    @Test
+    public void removeAllSubscriptions() {
+
+        CobotSubscriptionManager subscriptionManager = new CobotSubscriptionManager();
+        subscriptionManager.removeAllSubscriptions();
+    }
     
     
     @Test
