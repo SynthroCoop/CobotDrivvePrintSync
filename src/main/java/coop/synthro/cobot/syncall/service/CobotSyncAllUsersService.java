@@ -16,6 +16,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
@@ -24,15 +25,14 @@ import javax.ws.rs.core.MediaType;
  *
  * @author thors
  */
-@Path("/cobotCallback")
+@Path("/syncservice")
 public class CobotSyncAllUsersService {
 
     private DrivvePrintDatabaseManager databaseManager = new DrivvePrintDatabaseManager();
     private CobotUserWebClient cobotClient = new CobotUserWebClient();
 
-    @POST
+    @GET
     @Path("/syncallusers")
-    @Consumes(MediaType.APPLICATION_JSON)
 
     public void sync_all_users() {
         //get all print users
@@ -58,7 +58,7 @@ public class CobotSyncAllUsersService {
 
             String newPin = PinHelper.createUniquePin(allPins);
 
-            //databaseManager.addUserToDB(member.getEmail(), member.getName(), member.getEmail(), newPin);
+            databaseManager.addUserToDB(member.getEmail(), member.getName(), member.getEmail(), newPin);
 
             Logger.getLogger(CobotSyncAllUsersService.class.getName()).log(Level.INFO, "Successfully synced member with email" + member.getEmail());
 

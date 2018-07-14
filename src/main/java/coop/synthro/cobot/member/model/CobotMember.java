@@ -20,7 +20,7 @@ public class CobotMember
 
     private String canceled_to;
 
-    private String upcoming_plan;
+    //private String upcoming_plan;
 
     private String starts_at;
 
@@ -83,15 +83,15 @@ public class CobotMember
         this.canceled_to = canceled_to;
     }
 
-    public String getUpcoming_plan ()
-    {
-        return upcoming_plan;
-    }
-
-    public void setUpcoming_plan (String upcoming_plan)
-    {
-        this.upcoming_plan = upcoming_plan;
-    }
+//    public String getUpcoming_plan ()
+//    {
+//        return upcoming_plan;
+//    }
+//
+//    public void setUpcoming_plan (String upcoming_plan)
+//    {
+//        this.upcoming_plan = upcoming_plan;
+//    }
 
     public String getStarts_at ()
     {
@@ -246,7 +246,7 @@ public class CobotMember
     @Override
     public String toString()
     {
-        return "ClassPojo [phone = "+phone+", canceled_to = "+canceled_to+", upcoming_plan = "+upcoming_plan+", starts_at = "+starts_at+", confirmed_at = "+confirmed_at+", internal_memo = "+internal_memo+", next_invoice_at = "+next_invoice_at+", id = "+id+", picture = "+picture+", billing_emails = "+billing_emails+", customer_number = "+customer_number+", plan = "+plan+", email = "+email+", address = "+address+", name = "+name+", charge_taxes = "+charge_taxes+", payment_method = "+payment_method+", user = "+user+"]";
+        return "ClassPojo [phone = "+phone+", canceled_to = "+canceled_to+", starts_at = "+starts_at+", confirmed_at = "+confirmed_at+", internal_memo = "+internal_memo+", next_invoice_at = "+next_invoice_at+", id = "+id+", picture = "+picture+", billing_emails = "+billing_emails+", customer_number = "+customer_number+", plan = "+plan+", email = "+email+", address = "+address+", name = "+name+", charge_taxes = "+charge_taxes+", payment_method = "+payment_method+", user = "+user+"]";
     }
 
     /**
