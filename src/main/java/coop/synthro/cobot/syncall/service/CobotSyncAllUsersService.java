@@ -34,7 +34,7 @@ public class CobotSyncAllUsersService {
     @GET
     @Path("/syncallusers")
 
-    public void sync_all_users() {
+    public void syncallusers() {
         //get all print users
         List<PrintUser> printUsers = databaseManager.getAllUsersFromDB();
 

@@ -16,7 +16,7 @@
         <!-- Register resources and providers under com.vogella.jersey.first package. -->
         <init-param>
             <param-name>jersey.config.server.provider.packages</param-name>
-            <param-value>coop.synthro.cobot.subscription.service</param-value>
+            <param-value>coop.synthro.cobot.subscription.service,coop.synthro.cobot.syncall.service</param-value>
         </init-param>
         <init-param>
             <param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
