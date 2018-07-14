@@ -83,7 +83,7 @@ public class SubscriptionTest {
     public void getAllDbUsers() {
 
 //        DrivvePrintDatabaseManager dbManager = new DrivvePrintDatabaseManager();
-//        List<PrintUser> users = dbManager.getAllUsersFromDB();
+    //        List<PrintUser> users = dbManager.getAllUsersFromDB();
 //        Assert.assertNotNull(users);
     }
 }
