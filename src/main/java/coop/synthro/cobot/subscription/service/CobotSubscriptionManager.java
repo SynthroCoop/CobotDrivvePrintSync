@@ -43,6 +43,8 @@ public class CobotSubscriptionManager {
         //Check if we already have subscriptions
         List<EventSubscription> subs = listCobotSubscriptions();
         if (subs != null) {
+            
+            subs.stream().forEach((s)->Logger.getLogger(CobotSubscriptionManager.class.getName()).log(Level.INFO, "Subscription :"+s.getEvent() + "with callback url :" +s.getCallback_url()));
             //Now check if we have subscriptions for new members and canceled members
             //If not we subscribe.
             EventSubscription newMemberSub = subs.stream()
