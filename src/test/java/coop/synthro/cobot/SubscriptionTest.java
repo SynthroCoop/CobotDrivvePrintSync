@@ -78,6 +78,7 @@ public class SubscriptionTest {
 
         //CobotSubscriptionManager subscriptionManager = new CobotSubscriptionManager();
         //subscriptionManager.removeAllSubscriptions();
+        //subscriptionManager.listCobotSubscriptions();
     }
 
     @Test

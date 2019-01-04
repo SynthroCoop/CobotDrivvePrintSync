@@ -48,14 +48,14 @@ public class CobotSubscriptionManager {
             //Now check if we have subscriptions for new members and canceled members
             //If not we subscribe.
             EventSubscription newMemberSub = subs.stream()
-                    .filter((s) -> s.getEvent().equalsIgnoreCase("confirmed_membership"))
+                    .filter((s) -> s.getCallback_url().startsWith("https://cobotsync.synthro.coop/cobot-print-user-sync") && s.getEvent().equalsIgnoreCase("confirmed_membership"))
                     .findFirst()
                     .orElse(null);
             if (newMemberSub == null) {
                 subscribeForNewMember();
             }
             EventSubscription canceledMemberSub = subs.stream()
-                    .filter((s) -> s.getEvent().equalsIgnoreCase("canceled_membership"))
+                    .filter((s) -> s.getCallback_url().startsWith("https://cobotsync.synthro.coop/cobot-print-user-sync") && s.getEvent().equalsIgnoreCase("membership_cancellation_date_reached"))
                     .findFirst()
                     .orElse(null);
             if (canceledMemberSub == null) {
@@ -79,7 +79,7 @@ public class CobotSubscriptionManager {
         } else {
             //Unsubscribe all
             for (EventSubscription sub : subs) {
-                if(sub.getEvent().equals("canceled_membership")||sub.getEvent().equals("confirmed_membership") )
+                if(sub.getCallback_url().startsWith("https://cobotsync.synthro.coop/cobot-print-user-sync"))
                 unsubscribeById(sub.getId());
             }
         }
@@ -175,7 +175,7 @@ public class CobotSubscriptionManager {
             WebResource webResourcePost = client.resource(cobotSubscriptionUrl);
 
             JSONObject obj = new JSONObject();
-            obj.put("event", "canceled_membership");
+            obj.put("event", "membership_cancellation_date_reached");
             obj.put("callback_url", "https://" + syncDomain + callbackApplicationPath + "canceled_membership");
 
             ClientResponse response = webResourcePost
